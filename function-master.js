@@ -20,7 +20,7 @@ function objectValues(object) {
 //E: n/a
 function keysToString(object){
 	// CODE HERE
-	return Object.keys(object).join(' ');
+	return Object.keys(object).join(' ').trim();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -32,8 +32,19 @@ function keysToString(object){
 //E: n/a
 function valuesToString(object) {
 	// CODE HERE
-	return Object.values(object).join(' ');
-}
+	var result = '';
+
+	for (var key in object) {
+	  var value = object[key];
+
+	  if (typeof value === 'string' || typeof value === 'number') {
+		result += value + ' ';
+	  }
+	}
+  
+	return result.trim('');
+  }
+
 
 //////////////////////////////////////////////////////////////////////
 // Function 4 - Array or Object //////////////////////////////////////
@@ -160,12 +171,16 @@ function addFriend(name, object) {
 //E: n/a
 function isFriend(name, object) {
 	// CODE HERE
-	if (object.includes(name)) {
+	if (object.friends) {
+	for (var i = 0; i < object.friends.length; i++ ) {
+		if (object.friends[i] === name) {
 		return true;
-	} else {
+	} 
+} 
+}
 		return false;
 	}
-}
+
 
 //////////////////////////////////////////////////////////////////////
 // Function 13 - Non-Friends /////////////////////////////////////////
@@ -176,14 +191,34 @@ function isFriend(name, object) {
 //E: n/a
 function nonFriends(name, array) {
 	// CODE HERE
-	let result = [];
-	for (let i = 0; i < array.length; i++) {
-		if (array[i] !== name) {
-			result.push(array[i]);
-		}
+	var targetPerson = null;
+	var result = [];
+  
+	for (var i = 0; i < array.length; i++) {
+	  if (array[i].name === name) {
+		targetPerson = array[i];
+		break;
+	  }
 	}
+  
+	if (!targetPerson) {
+	  return result;
+	}
+  
+	for (var j = 0; j < array.length; j++) {
+	  var currentPerson = array[j];
+  
+	  if (currentPerson.name === name) {
+		continue;
+	  }
+  
+	  if (targetPerson.friends.indexOf(currentPerson.name) === -1) {
+		result.push(currentPerson.name);
+	  }
+	}
+  
 	return result;
-}
+  }
 
 //////////////////////////////////////////////////////////////////////
 // Function 14 - Update Object ///////////////////////////////////////
@@ -208,10 +243,11 @@ function updateObject(object, key, value) {
 function removeProperties(object, array) {
 	// CODE HERE
 	for (var i = 0; i < array.length; i++) {
-		if (array[i] === Object.values(object)) {
+		if (array[i] in object) {
 			delete object[array[i]];
 		}
 	}
+      return object;
 }
 
 //////////////////////////////////////////////////////////////////////
